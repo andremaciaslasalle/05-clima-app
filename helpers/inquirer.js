@@ -8,16 +8,16 @@ const preguntas = [
         message:"¿Qué desea hacer?".white,
         choices:[
             {
-                value:"1",
-                name:""
+                value:1,
+                name:`${"1.".green} Buscar ciudad`
             },
             {
-                value:"2",
-                name:""
+                value:2,
+                name:`${"2.".green} Historial`
             },
             {
-                value:"3",
-                name:""
+                value:0,
+                name:`${"0.".green} Salir`
             }
         ]
     }
@@ -53,7 +53,48 @@ const leerInput = async(message) =>{
     return desc;
 }
 
+const pausa = async() =>{
+    const enterDatos = [
+        {
+            type:"input",
+            name:"enter",
+            message:`Presione ${"ENTER".green} para continuar`
+        }
+    ];
+
+    console.log("\n");
+    await inquirer.prompt(enterDatos);
+}
+
+const listarLugares = async(lugares = []) => {
+    const choices = lugares.map((lugar,i) =>{
+        const idx = `${i+1}`.green;
+        return{
+            value:lugar.id,
+            name: `${idx} ${lugar.nombre}`
+        }
+    });
+    choices.unshift({
+        value:"0",
+        name:`${"0".green} Cancelar`
+    });
+    
+    const preguntas = [
+        {
+            type:"list",
+            name:"id",
+            message: "Seleccione lugar: ",
+            choices
+        }
+    ]
+
+    const { id } = await inquirer.prompt(preguntas);
+    return id;
+}
+
 module.exports = {
     inquirerMenu,
-    leerInput
+    leerInput,
+    pausa,
+    listarLugares
 }
